@@ -1,0 +1,25 @@
+{
+  "name": "npsparse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rustymotors/npsparse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/rustymotors/npsparse/issues"
+  },
+  "homepage": "https://github.com/rustymotors/npsparse#readme",
+  "dependencies": {
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
+  }
+}
