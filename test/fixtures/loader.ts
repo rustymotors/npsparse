@@ -17,28 +17,6 @@ function getFixtureFileNames(): string[] {
   return fixtureFileNames;
 }
 
-function asciiToHexValues(asciiArray: Buffer): Buffer {
-  // Split the buffer into sets of 2 bytes
-  const hexValues = Buffer.alloc(asciiArray.length / 2);
-  let count = 0;
-
-  for (let i = 0; i < asciiArray.length / 2; i += 2) {
-    const byte = Buffer.from([asciiArray[i], asciiArray[i + 1]]);
-    if (byte.length !== 2) {
-      throw new Error(`Invalid byte length: ${byte.length}`);
-    }
-    const hexValue = `0x${byte.toString("utf8")}`;
-
-    hexValues[count] = parseInt(hexValue, 16);
-    count++;
-  }
-
-  // Join the hex values into a single buffer
-  const hexBuffer = hexValues;
-
-  return hexBuffer;
-}
-
 /**
  * Loads all fixture files from the fixtures directory.
  * @returns {Buffer[]} An array of Buffers containing the contents of the fixture files.
@@ -49,7 +27,7 @@ export function loadFixtureFiles(): Buffer[] {
   for (const fixtureFileName of fixtureFileNames) {
     const fixtureFilePath = join(__dirname, fixtureFileName);
     const fileBuffer = readFileSync(fixtureFilePath);
-    fixtures.push(asciiToHexValues(fileBuffer));
+    fixtures.push(fileBuffer);
   }
   return fixtures;
 }
