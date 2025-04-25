@@ -1,17 +1,17 @@
 module Main where
 
-import Network.Socket
-import Control.Concurrent (forkIO, forkFinally, threadDelay)
+import Control.Concurrent (forkFinally, forkIO, threadDelay)
+import Control.Monad (forever, void)
+import Data.Bits (shiftL, (.|.))
 import qualified Data.ByteString as BS
 import Data.Word (Word16)
-import Data.Bits (shiftL, (.|.))
-import Control.Monad (forever, void)
-import qualified Network.Socket.ByteString as NSB
+import Network.Socket
+import Network.Socket.ByteString
 import Numeric (showHex)
 
 -- | Convert ByteString to a hex string
 bytesToHex :: BS.ByteString -> String
-bytesToHex = concatMap (\b -> let h = showHex b "" in if length h == 1 then '0':h else h) . BS.unpack
+bytesToHex = concatMap (\b -> let h = showHex b "" in if length h == 1 then '0' : h else h) . BS.unpack
 
 -- | Parse the packet to extract the ID and length
 parsePacket :: BS.ByteString -> Maybe (Word16, Word16)
@@ -20,12 +20,12 @@ parsePacket bs
   | otherwise =
       let packetId = (fromIntegral (BS.index bs 0) `shiftL` 8) .|. fromIntegral (BS.index bs 1)
           packetLen = (fromIntegral (BS.index bs 2) `shiftL` 8) .|. fromIntegral (BS.index bs 3)
-      in Just (packetId, packetLen)
+       in Just (packetId, packetLen)
 
 -- | Handle a single client connection
 handleClient :: Socket -> PortNumber -> IO ()
 handleClient conn port = do
-  msg <- NSB.recv conn 1024
+  msg <- recv conn 1024
   putStrLn $ "Received packet on port " ++ show port ++ ": " ++ bytesToHex msg
   case parsePacket msg of
     Just (packetId, packetLen) ->
@@ -45,7 +45,7 @@ startServer port = withSocketsDo $ do
     void $ forkFinally (handleClient conn port) (const $ close conn)
   where
     resolve = do
-      let hints = defaultHints { addrFlags = [AI_PASSIVE], addrSocketType = Stream }
+      let hints = defaultHints {addrFlags = [AI_PASSIVE], addrSocketType = Stream}
       head <$> getAddrInfo (Just hints) Nothing (Just $ show port)
     createSocket addr = do
       sock <- socket (addrFamily addr) (addrSocketType addr) (addrProtocol addr)
@@ -55,7 +55,7 @@ startServer port = withSocketsDo $ do
 
 main :: IO ()
 main = do
-  let ports = [8080, 8081] -- List of ports to listen on
-  mapM_ (\port -> forkIO (startServer port)) ports
+  let ports = [3000, 9226, 8227, 8228, 43300] -- List of ports to listen on
+  mapM_ (forkIO . startServer) ports
   -- Keep the main thread alive indefinitely
   threadDelay maxBound
