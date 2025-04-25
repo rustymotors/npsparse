@@ -134,3 +134,26 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Haskell-specific files
+*.hi
+*.o
+*.dyn_hi
+*.dyn_o
+*.prof
+*.eventlog
+*.tix
+
+# Cabal build artifacts
+dist/
+dist-newstyle/
+cabal.project.local
+cabal.project.local~
+setup-config
+
+# Stack build artifacts
+.stack-work/
+
+# Haskell REPL history
+.ghci_history
+.ghc.environment.*

@@ -28,7 +28,7 @@ const clone = <T>(obj: T): T => {
 };
 
 const makeAtIndex = (index: number) => {
-  return Object.freeze((input: string): string =>{
+  return Object.freeze((input: string): string => {
     if (index < 0 || index >= input.length) {
       throw new Error("Index out of bounds");
     }
@@ -39,13 +39,13 @@ const makeAtIndex = (index: number) => {
 const first = makeAtIndex(0);
 const second = makeAtIndex(1);
 
-
 const returnValueIfTrue = (condition: boolean, value: any): any => {
   if (condition) {
     return value;
   }
   throw new Error("Condition is false");
-}
+};
+
 
 const getTwoCharacters = (input: string): string => {
   if (input.length < 2) {
@@ -109,16 +109,32 @@ const parser = () => {
   };
 };
 
-const r = parser().parse("1101");
+type ParseTreeNodeType =
+  | "word"
+  | "byte"
+  | "string"
+  | "number"
+  | "program"
+  | "error";
+
+type ParseTreeNode = {
+  type: ParseTreeNodeType;
+  value: any;
+  children: ParseTreeNode[];
+    remaining: string[];
+};
+
+// =============
+
+const parse = (input: string): ParseTreeNode => {
+  return {
+    type: "error",
+    value: "Parsing error",
+    children: [],
+    remaining: [input],
+  };
+};
 
 console.log("Parsing");
-
-if (r instanceof Array) {
-  r.map((i) => {
-    console.log(i.toString());
-  });
-} else {
-  console.log(r.error);
-}
-
-console.log("Result:", hexByteToAlpha("af"));
+const r = parse("1101");
+console.log("Parsed result:", r);

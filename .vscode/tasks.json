@@ -1,0 +1,31 @@
+{
+  // Automatically created by phoityne-vscode extension.
+
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "haskell build",
+      "type": "shell",
+      "command": "cabal build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "haskell clean & build",
+      "type": "shell",
+      "command": "cabal clean && cabal build",
+      "group": "build"
+    },
+    {
+      "label": "haskell test",
+      "type": "shell",
+      "command": "cabal test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    }
+  ]
+}
