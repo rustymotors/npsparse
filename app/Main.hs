@@ -8,19 +8,11 @@ import Data.Word (Word16)
 import Network.Socket
 import Network.Socket.ByteString
 import Numeric (showHex)
+import Lib (parsePacket)
 
 -- | Convert ByteString to a hex string
 bytesToHex :: BS.ByteString -> String
 bytesToHex = concatMap (\b -> let h = showHex b "" in if length h == 1 then '0' : h else h) . BS.unpack
-
--- | Parse the packet to extract the ID and length
-parsePacket :: BS.ByteString -> Maybe (Word16, Word16)
-parsePacket bs
-  | BS.length bs < 4 = Nothing
-  | otherwise =
-      let packetId = (fromIntegral (BS.index bs 0) `shiftL` 8) .|. fromIntegral (BS.index bs 1)
-          packetLen = (fromIntegral (BS.index bs 2) `shiftL` 8) .|. fromIntegral (BS.index bs 3)
-       in Just (packetId, packetLen)
 
 -- | Handle a single client connection
 handleClient :: Socket -> PortNumber -> IO ()
